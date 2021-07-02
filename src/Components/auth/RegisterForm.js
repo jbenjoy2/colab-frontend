@@ -73,6 +73,7 @@ function RegisterForm({ register }) {
                   className="form-control"
                   value={formData.username}
                   onChange={handleChange}
+                  required
                 />
               </div>
               <div className="form-group">
@@ -83,6 +84,7 @@ function RegisterForm({ register }) {
                   className="form-control"
                   value={formData.password}
                   onChange={handleChange}
+                  required
                 />
               </div>
 
@@ -93,6 +95,7 @@ function RegisterForm({ register }) {
                   className="form-control"
                   value={formData.firstName}
                   onChange={handleChange}
+                  required
                 />
               </div>
               <div className="form-group">
@@ -102,6 +105,7 @@ function RegisterForm({ register }) {
                   className="form-control"
                   value={formData.lastName}
                   onChange={handleChange}
+                  required
                 />
               </div>
               <div className="form-group">
@@ -112,6 +116,7 @@ function RegisterForm({ register }) {
                   className="form-control"
                   value={formData.email}
                   onChange={handleChange}
+                  required
                 />
               </div>
               <span>
