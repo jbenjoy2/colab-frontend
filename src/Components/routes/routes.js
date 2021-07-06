@@ -1,13 +1,11 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import Arrangement from "../Arrangement/Arrangement";
-import LoadingSpinner from "../auth/LoadingSpinner";
+
 import LoginForm from "../auth/LoginForm";
 import RegisterForm from "../auth/RegisterForm";
 
 import UserDashboard from "../User/UserDashboard";
-
-import Usertest from "../User/Usertest";
 
 import Protected from "./Protected";
 import Profile from "../Profile/Profile";
@@ -35,10 +33,10 @@ function Routes({ login, register }) {
       <Protected exact path="/profile">
         <Profile />
       </Protected>
-      <Protected exact path="/:projectId">
+      <Protected exact path="/projects/:projectId">
         <ProjectMain />
       </Protected>
-      <Protected exact path="/:projectId/arrangement-lab">
+      <Protected exact path="/projects/:projectId/arrangement-lab">
         <Arrangement />
       </Protected>
       <Redirect to="/" />
