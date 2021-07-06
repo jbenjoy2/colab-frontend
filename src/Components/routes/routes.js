@@ -19,13 +19,6 @@ function Routes({ login, register }) {
   const { currentUser } = useSelector(st => st.user);
   return (
     <Switch>
-      <Route exact path="/loading">
-        <LoadingSpinner />
-      </Route>
-      <Route exact path="/users">
-        <Usertest />
-      </Route>
-
       <Route exact path="/">
         {currentUser.username ? <UserDashboard /> : <LandingPage />}
       </Route>
@@ -36,18 +29,18 @@ function Routes({ login, register }) {
         <LoginForm login={login} />
       </Route>
 
-      <Route exact path="/dashboard">
+      <Protected exact path="/dashboard">
         <UserDashboard />
-      </Route>
-      <Route exact path="/profile">
+      </Protected>
+      <Protected exact path="/profile">
         <Profile />
-      </Route>
-      <Route exact path="/:projectId">
+      </Protected>
+      <Protected exact path="/:projectId">
         <ProjectMain />
-      </Route>
-      <Route exact path="/:projectId/arrangement-lab">
+      </Protected>
+      <Protected exact path="/:projectId/arrangement-lab">
         <Arrangement />
-      </Route>
+      </Protected>
       <Redirect to="/" />
     </Switch>
   );
