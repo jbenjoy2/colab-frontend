@@ -23,7 +23,7 @@ function LoginForm({ login }) {
     if (result.success) {
       history.push("/dashboard");
     } else {
-      setFormErrors(result.errors);
+      setFormErrors([result.errors.data.error.message]);
     }
   };
 
@@ -77,6 +77,15 @@ function LoginForm({ login }) {
                   required
                 />
               </div>
+              {formErrors.length ? (
+                <div className="alert alert-danger" role="alert">
+                  {formErrors.map(error => (
+                    <p className="mb-0 small" key={error}>
+                      {error}
+                    </p>
+                  ))}
+                </div>
+              ) : null}
 
               <button className="btn btn-cancel btn-block text-light" onSubmit={handleSubmit}>
                 Login
