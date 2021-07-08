@@ -139,7 +139,7 @@ function Arrangement() {
       await ColabAPI.updatedProjectArrangement(projectId, { data: withPosition });
       setSuccess(true);
     } catch (error) {
-      console.error(error);
+      console.error("error", error);
       setErrors(errors => [...errors, error]);
     }
   };
