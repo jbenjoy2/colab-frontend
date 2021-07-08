@@ -45,7 +45,7 @@ function Arrangement() {
           }))
         );
       } catch (error) {
-        if (error.status) {
+        if (error.status && error.status !== 404) {
           setIsRedirecting(true);
         }
       }
