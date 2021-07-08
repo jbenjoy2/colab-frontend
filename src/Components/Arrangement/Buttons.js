@@ -32,6 +32,7 @@ function ToolBar({ submit, projectId, length }) {
             }}
             variant="success"
             block
+            disabled={length < 1}
           >
             Save
           </Button>
