@@ -8,7 +8,7 @@ import useModal from "../../hooks/useModal";
 import { useHistory } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 
-function ToolBar({ submit, projectId }) {
+function ToolBar({ submit, projectId, length }) {
   const history = useHistory();
   const { isShowing, toggle } = useModal();
 
@@ -27,6 +27,7 @@ function ToolBar({ submit, projectId }) {
         <Col xs={12} md={6} className="text-center">
           <Button
             onClick={() => {
+              console.log(length);
               submit(projectId);
             }}
             variant="success"
