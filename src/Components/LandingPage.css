@@ -125,15 +125,6 @@
 }
 
 @-moz-document url-prefix() {
-  .pimg1,
-  .pimg2,
-  .pimg3,
-  .pimg4,
-  .pimg5,
-  .pimg6,
-  .pimg7 {
-    background-attachment: scroll;
-  }
   .landingPage-main {
     height: 95vh;
   }
