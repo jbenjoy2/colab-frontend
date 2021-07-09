@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 function LandingPage() {
   return (
-    <div style={{ overflowY: "scroll", height: "95vh" }}>
+    <div className="landingPage-main">
       <Helmet>
         <title>Colab - Home</title>
         <meta
