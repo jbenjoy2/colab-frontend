@@ -120,8 +120,8 @@
 }
 
 .landingPage-main {
-  overflow-y: "scroll";
-  height: "95vh";
+  overflow-y: scroll;
+  height: 95vh;
 }
 
 @-moz-document url-prefix() {
@@ -135,6 +135,6 @@
     background-attachment: scroll;
   }
   .landingPage-main {
-    height: "95vh";
+    height: 95vh;
   }
 }
