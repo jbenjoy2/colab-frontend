@@ -27,7 +27,6 @@ function ToolBar({ submit, projectId, length }) {
         <Col xs={12} md={6} className="text-center">
           <Button
             onClick={() => {
-              console.log(length);
               submit(projectId);
             }}
             variant="success"
@@ -48,7 +47,11 @@ function ToolBar({ submit, projectId, length }) {
               Are you sure you want to exit? Any unsaved changes will be lost
             </p>
             <div className="mt-2 container row justify-content-center">
-              <Button onClick={toggle} variant="outline-danger" className="mr-3">
+              <Button
+                onClick={toggle}
+                variant="outline-danger"
+                className="mr-3"
+              >
                 Cancel
               </Button>
               <Button

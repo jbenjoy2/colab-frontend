@@ -34,7 +34,6 @@ function UserRequestCard({ user, projectId, owner }) {
   useEffect(() => {
     const getProjectName = async (projectId) => {
       const req = await ColabAPI.getProjectDetails(projectId);
-      console.log("req", req);
       if (req) {
         setProjectName(req.title);
       }
@@ -45,7 +44,6 @@ function UserRequestCard({ user, projectId, owner }) {
   // make a request on click and then rerender the request card
   const handleClick = async () => {
     const data = { project_id: +projectId, recipient: user.username };
-    console.log("title", projectName);
     await ColabAPI.makeRequest(currentUser.username, data);
     await ColabAPI.sendMail(
       currentUser.username,
