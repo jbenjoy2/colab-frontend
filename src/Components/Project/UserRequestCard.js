@@ -3,27 +3,57 @@ import ColabAPI from "../../api/colabApi";
 import { useSelector } from "react-redux";
 import "./UserRequestCard.css";
 function UserRequestCard({ user, projectId, owner }) {
-  const { currentUser } = useSelector(st => st.user);
+  /**
+   *
+   * card component to render results from user search to request user collaborations
+   * props: user object, projectId, project owner
+   */
+  const { currentUser } = useSelector((st) => st.user);
   const [requests, setRequests] = useState([]);
   const [status, setStatus] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
+  const [projectName, setProjectName] = useState(null);
+
+  // get all requests associated with project on page load, and whenever the status variable changs (on a request button click)
   useEffect(() => {
-    const getProjectRequests = async projectId => {
+    const getProjectRequests = async (projectId) => {
       const requests = await ColabAPI.getProjectRequests(projectId);
 
       if (requests.projRequests) {
         if (user.username === owner) {
           setIsOwner(true);
         }
-        setRequests(requests.projRequests.filter(req => req.recipient === user.username));
+        setRequests(
+          requests.projRequests.filter((req) => req.recipient === user.username)
+        );
       }
     };
     getProjectRequests(projectId);
   }, [status, owner, user.username, projectId]);
 
+  useEffect(() => {
+    const getProjectName = async (projectId) => {
+      const req = await ColabAPI.getProjectDetails(projectId);
+      console.log("req", req);
+      if (req) {
+        setProjectName(req.title);
+      }
+    };
+    getProjectName(projectId);
+  }, [projectId]);
+
+  // make a request on click and then rerender the request card
   const handleClick = async () => {
     const data = { project_id: +projectId, recipient: user.username };
+    console.log("title", projectName);
     await ColabAPI.makeRequest(currentUser.username, data);
+    await ColabAPI.sendMail(
+      currentUser.username,
+      projectName,
+      user.email,
+      "collaboration",
+      `${process.env.FRONT_END_BASE_URL || "http://localhost:3000"}/dashboard`
+    );
     setStatus(true);
   };
 
@@ -36,25 +66,41 @@ function UserRequestCard({ user, projectId, owner }) {
             {user.firstName} {user.lastName}
           </p>
           {isOwner && (
-            <button className="btn btn-outline-primary text-uppercase float-right" disabled>
+            <button
+              className="btn btn-outline-primary text-uppercase float-right"
+              disabled
+            >
               Project Owner
             </button>
           )}
-          {!isOwner && (requests.length === 0 || requests[requests.length - 1].accepted === false) && (
-            <button onClick={handleClick} className="btn btn-primary text-uppercase float-right">
-              Request
-            </button>
-          )}
-          {requests[requests.length - 1] && requests[requests.length - 1].accepted === null && (
-            <button className="btn btn-warning text-uppercase float-right" disabled>
-              Request Pending
-            </button>
-          )}
-          {requests[requests.length - 1] && requests[requests.length - 1].accepted === true && (
-            <button className="btn btn-outline-secondary text-uppercase float-right" disabled>
-              Already a collaborator
-            </button>
-          )}
+          {!isOwner &&
+            (requests.length === 0 ||
+              requests[requests.length - 1].accepted === false) && (
+              <button
+                onClick={handleClick}
+                className="btn btn-primary text-uppercase float-right"
+              >
+                Request
+              </button>
+            )}
+          {requests[requests.length - 1] &&
+            requests[requests.length - 1].accepted === null && (
+              <button
+                className="btn btn-warning text-uppercase float-right"
+                disabled
+              >
+                Request Pending
+              </button>
+            )}
+          {requests[requests.length - 1] &&
+            requests[requests.length - 1].accepted === true && (
+              <button
+                className="btn btn-outline-secondary text-uppercase float-right"
+                disabled
+              >
+                Already a collaborator
+              </button>
+            )}
         </div>
       </div>
     </div>
