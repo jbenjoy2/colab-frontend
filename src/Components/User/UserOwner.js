@@ -5,9 +5,9 @@ import "./UserOwner.css";
 import moment from "moment";
 
 function UserOwner() {
-  const { projects } = useSelector(st => st.user.currentUser);
+  const { projects } = useSelector((st) => st.user.currentUser);
   projects.sort((a, b) => moment(b.updatedAt) - moment(a.updatedAt));
-  const owned = projects.filter(p => p.owner);
+  const owned = projects.filter((p) => p.owner);
 
   return (
     <div className="UserOwnerProjects">

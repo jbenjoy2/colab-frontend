@@ -76,6 +76,13 @@ class ColabAPI {
     return response.foundRhymes;
   }
 
+  static async uploadPhoto(photoURL, username) {
+    const data = { photoURL, username };
+    console.log("in api before res", photoURL, username);
+    const response = await this.request("imageUpload", data, "post");
+    console.log("in api after res");
+    return response;
+  }
   static async sendMail(
     senderUN,
     projectName,
@@ -88,6 +95,10 @@ class ColabAPI {
     return response;
   }
 
+  static async getTinyKey() {
+    let res = await this.request("tinyKey");
+    return res;
+  }
   // retrieve all sections from database
   static async getSections() {
     let response = await this.request("sections");

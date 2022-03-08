@@ -5,11 +5,12 @@ import {
   UPDATE_USER_PROJECT,
   ADD_USER_PROJECT,
   ADD_USER_COWRITE,
-  DELETE_USER_PROJECT
+  DELETE_USER_PROJECT,
+  UPDATE_PROFILE_PICTURE,
 } from "../actions/types";
 
 const INITIAL_STATE = {
-  currentUser: {}
+  currentUser: {},
 };
 
 const rootReducer = (state = INITIAL_STATE, action) => {
@@ -23,8 +24,16 @@ const rootReducer = (state = INITIAL_STATE, action) => {
           ...state.currentUser,
           firstName: action.user.firstName,
           lastName: action.user.lastName,
-          email: action.user.email
-        }
+          email: action.user.email,
+        },
+      };
+    case UPDATE_PROFILE_PICTURE:
+      return {
+        ...state,
+        currentUser: {
+          ...state.currentUser,
+          imageURL: action.profilePicture.imageUrl,
+        },
       };
     case ADD_USER_PROJECT: {
       return {
@@ -35,10 +44,10 @@ const rootReducer = (state = INITIAL_STATE, action) => {
             ...state.currentUser.projects,
             {
               ...action.project,
-              owner: true
-            }
-          ]
-        }
+              owner: true,
+            },
+          ],
+        },
       };
     }
     case ADD_USER_COWRITE: {
@@ -50,17 +59,20 @@ const rootReducer = (state = INITIAL_STATE, action) => {
             ...state.currentUser.projects,
             {
               ...action.project,
-              owner: false
-            }
-          ]
-        }
+              owner: false,
+            },
+          ],
+        },
       };
     }
     case UPDATE_USER_PROJECT: {
-      const otherProjs = state.currentUser.projects.filter(proj => proj.id !== action.project.id);
+      const otherProjs = state.currentUser.projects.filter(
+        (proj) => proj.id !== action.project.id
+      );
 
-      const isOwner = state.currentUser.projects.filter(proj => proj.id === action.project.id)[0]
-        .owner;
+      const isOwner = state.currentUser.projects.filter(
+        (proj) => proj.id === action.project.id
+      )[0].owner;
 
       return {
         ...state,
@@ -70,20 +82,22 @@ const rootReducer = (state = INITIAL_STATE, action) => {
             ...otherProjs,
             {
               ...action.project,
-              owner: isOwner
-            }
-          ]
-        }
+              owner: isOwner,
+            },
+          ],
+        },
       };
     }
     case DELETE_USER_PROJECT: {
-      const otherProjs = state.currentUser.projects.filter(proj => proj.id !== action.projectId);
+      const otherProjs = state.currentUser.projects.filter(
+        (proj) => proj.id !== action.projectId
+      );
       return {
         ...state,
         currentUser: {
           ...state.currentUser,
-          projects: [...otherProjs]
-        }
+          projects: [...otherProjs],
+        },
       };
     }
 

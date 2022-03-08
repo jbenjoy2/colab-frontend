@@ -1,4 +1,7 @@
 .UserCowriteProjects {
   text-align: center;
-  color: lightgray;
+  color: lightgray !important;
+}
+.UserCowrite-title {
+  color: lightgray !important;
 }

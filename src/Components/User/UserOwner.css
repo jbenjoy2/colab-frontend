@@ -1,8 +1,8 @@
 .UserOwnerProjects {
   text-align: center;
-  color: lightgray;
 }
 
 .UserOwner-title {
   margin-top: 1em;
+  color: lightgray !important;
 }

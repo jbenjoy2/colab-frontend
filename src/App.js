@@ -11,8 +11,8 @@ import LoadingSpinner from "./Components/auth/LoadingSpinner";
 
 function App() {
   const dispatch = useDispatch();
-
   const [token, setToken] = useLocalStorage("colab-token", null);
+
   const [infoLoaded, setInfoLoaded] = useState(false);
   useEffect(() => {
     console.debug("App useEffect loadUserInfo", "token=", token);
@@ -33,7 +33,7 @@ function App() {
     getCurrentUser();
   }, [token, dispatch]);
 
-  const login = async data => {
+  const login = async (data) => {
     try {
       const token = await ColabAPI.loginUser(data);
       setToken(token);
@@ -43,7 +43,7 @@ function App() {
       return { success: false, errors };
     }
   };
-  const register = async data => {
+  const register = async (data) => {
     try {
       const token = await ColabAPI.registerUser(data);
       setToken(token);
@@ -62,7 +62,6 @@ function App() {
       console.log(error);
     }
   };
-
   return (
     <>
       <Navbar logout={logout} />

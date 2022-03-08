@@ -1,5 +1,5 @@
 import { Alert, OverlayTrigger, Tooltip } from "react-bootstrap";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, Link, Redirect } from "react-router-dom";
 import ColabAPI from "../../api/colabApi";
 import LoadingSpinner from "../auth/LoadingSpinner";
@@ -8,7 +8,11 @@ import Rhymetest from "../Rhymes/Rhymetest";
 import "./ProjectMain.css";
 import ProjectNotesForm from "./ProjectNotesForm";
 import { useDispatch, useSelector } from "react-redux";
-import { updateUserProjectApi, deleteUserProjectApi, leaveProjectApi } from "../../actions/user";
+import {
+  updateUserProjectApi,
+  deleteUserProjectApi,
+  leaveProjectApi,
+} from "../../actions/user";
 import UserSearch from "./UserSearch";
 import { Helmet } from "react-helmet";
 function ProjectMain() {
@@ -21,16 +25,17 @@ function ProjectMain() {
   const [editing, setEditing] = useState(false);
   const [title, setTitle] = useState(project.title);
   const [errors, setErrors] = useState([]);
-  const { currentUser } = useSelector(st => st.user);
+  const { currentUser } = useSelector((st) => st.user);
   const [isRedirecting, setIsReidrecting] = useState(false);
   useEffect(() => {
-    const getProject = async id => {
+    const getProject = async (id) => {
       try {
         const proj = await ColabAPI.getProject(id);
         setProject(proj);
         setTitle(proj.title);
         setCowriters(new Set(proj.contributors));
       } catch (error) {
+        console.log("error", error);
         if (error.status) {
           setIsReidrecting(true);
         }
@@ -42,46 +47,47 @@ function ProjectMain() {
   }, [projectId]);
 
   const cowriterString = Array.from(cowriters)
-    .filter(c => c !== project.owner)
+    .filter((c) => c !== project.owner)
     .join(", ");
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     setTitle(e.target.value);
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setEditing(false);
   };
 
-  const inputEl = useRef(null);
-  function handleFocus() {
-    inputEl.current.select();
-  }
-
   const saveProject = async (projectId, notes) => {
-    setProject(project => ({ ...project, notes: notes }));
+    setProject((project) => ({ ...project, notes: notes }));
     try {
       await ColabAPI.updatedProject(projectId, {
         notes: notes,
-        title: title
+        title: title,
       });
 
       const updateProjectInStore = updateUserProjectApi(projectId, {
         notes: notes,
-        title: title
+        title: title,
       });
       await updateProjectInStore(dispatch);
       setSuccess(true);
     } catch (error) {
       console.log(error);
-      if (error.data.error.message === "value too long for type character varying(25)") {
-        setErrors(errors => [...errors, "Title must be shorter than 25 characters"]);
+      if (
+        error.data.error.message ===
+        "value too long for type character varying(25)"
+      ) {
+        setErrors((errors) => [
+          ...errors,
+          "Title must be shorter than 25 characters",
+        ]);
       }
     }
   };
 
-  const deleteProject = async projectId => {
+  const deleteProject = async (projectId) => {
     try {
       const deleteProj = deleteUserProjectApi(projectId);
       await deleteProj(dispatch);
@@ -90,7 +96,7 @@ function ProjectMain() {
     }
   };
 
-  const leaveProject = async projectId => {
+  const leaveProject = async (projectId) => {
     try {
       const leaveProj = leaveProjectApi(projectId, currentUser.username);
       await leaveProj(dispatch);
@@ -122,7 +128,7 @@ function ProjectMain() {
               maxLength="25"
               minLength={2}
               autoFocus
-              onFocus={e => e.currentTarget.select()}
+              onFocus={(e) => e.currentTarget.select()}
             />
             <button className="btn btn-primary mt-2">Save</button>
           </form>
@@ -140,23 +146,33 @@ function ProjectMain() {
             <OverlayTrigger
               key={"edit"}
               placement="right"
-              overlay={<Tooltip id={`tooltip-edit`}>Click To Edit Project Title</Tooltip>}
+              overlay={
+                <Tooltip id={`tooltip-edit`}>
+                  Click To Edit Project Title
+                </Tooltip>
+              }
             >
               <h1
                 onClick={() => {
                   setEditing(true);
                 }}
-                style={{ textDecoration: "underline", textDecorationColor: "#F47B33" }}
+                style={{
+                  textDecoration: "underline",
+                  textDecorationColor: "#F47B33",
+                }}
                 className="text-light mb-1 ProjectMain-title"
               >
                 {title}
-                {errors.length > 0 && errors.map(error => <p className="text-danger">{error}</p>)}
+                {errors.length > 0 &&
+                  errors.map((error) => <p className="text-danger">{error}</p>)}
               </h1>
             </OverlayTrigger>
           </>
         )}
       </div>
-      <h2 className="text-center mb-1 ProjectMain-owner">Owner: {project.owner}</h2>
+      <h2 className="text-center mb-1 ProjectMain-owner">
+        Owner: {project.owner}
+      </h2>
       <h2 className="text-center mb-5 ProjectMain-contributor">
         Contributors: {cowriterString.length > 0 ? cowriterString : "None yet!"}
       </h2>
@@ -164,7 +180,10 @@ function ProjectMain() {
         <Rhymetest />
         <Quotetest />
         <UserSearch projectId={projectId} owner={project.owner} />
-        <Link className="btn btn-primary" to={`/projects/${projectId}/arrangement-lab`}>
+        <Link
+          className="btn btn-primary"
+          to={`/projects/${projectId}/arrangement-lab`}
+        >
           Arrangement Lab
         </Link>
       </div>

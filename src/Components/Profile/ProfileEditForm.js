@@ -1,30 +1,34 @@
 import React, { useState } from "react";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import Alert from "react-bootstrap/Alert";
+import "./ProfileEditForm.scss";
+import ProfilePictureUpload from "../User/profilePicture";
 
 function ProfileEditForm({ user, updateUser }) {
-  const [current, setCurrent] = useState(user);
+  const [showModal, setShowModal] = useState(false);
+  const [current] = useState(user);
   const [success, setSuccess] = useState(false);
   const [formData, setFormData] = useState({
     firstName: current.firstName,
     lastName: current.lastName,
     email: current.email,
-    username: current.username
+    username: current.username,
   });
 
   const [formErrors, setFormErrors] = useState([]);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(data => ({ ...data, [name]: value }));
+    setFormData((data) => ({ ...data, [name]: value }));
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const profileData = {
       firstName: formData.firstName,
       lastName: formData.lastName,
-      email: formData.email
+      email: formData.email,
     };
 
     const username = formData.username;
@@ -43,13 +47,23 @@ function ProfileEditForm({ user, updateUser }) {
       <h3 className="text-light">Edit Profile</h3>
       <div className="card">
         <div className="card-body">
-          <form>
-            <div className="form-group">
-              <label>Username:</label>
-              <p className="form-control-plaintext" style={{ color: "#3597b1" }}>
-                {formData.username}
-              </p>
+          <div className="d-flex justify-content-center mb-4">
+            <div className="d-flex flex-column align-items-center">
+              <div className="profile-pic" onClick={() => setShowModal(true)}>
+                <img
+                  src={user.imageURL}
+                  width={80}
+                  alt="profile-pic"
+                  className="rounded-circle profile-pic-image"
+                />
+                <div className="profile-pic-upload-overlay">
+                  <FontAwesomeIcon icon={faUpload} color="white" size="3x" />
+                </div>
+              </div>
+              <div className="font-weight-bold">@{user.username}</div>
             </div>
+          </div>
+          <form>
             <div className="form-group">
               <label>First Name</label>
               <input
@@ -78,9 +92,14 @@ function ProfileEditForm({ user, updateUser }) {
               />
             </div>
 
-            {formErrors.length ? <Alert type="danger" messages={formErrors} /> : null}
+            {formErrors.length ? (
+              <Alert type="danger" messages={formErrors} />
+            ) : null}
 
-            <button className="btn btn-primary btn-block mt-4" onClick={handleSubmit}>
+            <button
+              className="btn btn-primary btn-block mt-4"
+              onClick={handleSubmit}
+            >
               Save Changes
             </button>
           </form>
@@ -96,6 +115,11 @@ function ProfileEditForm({ user, updateUser }) {
           )}
         </div>
       </div>
+      <ProfilePictureUpload
+        setShowModal={setShowModal}
+        showModal={showModal}
+        user={user}
+      />
     </div>
   );
 }

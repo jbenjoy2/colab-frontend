@@ -5,100 +5,117 @@ import {
   UDPATE_USER,
   UPDATE_USER_PROJECT,
   DELETE_USER_PROJECT,
-  ADD_USER_COWRITE
+  ADD_USER_COWRITE,
+  UPDATE_PROFILE_PICTURE,
 } from "./types";
 import Api from "../api/colabApi";
 
 export function getUserApi(username) {
-  return async function(dispatch) {
+  return async function (dispatch) {
     const res = await Api.getUser(username);
     return dispatch(setUser(res));
   };
 }
 
-const setUser = user => {
+const setUser = (user) => {
   return {
     type: LOGIN_USER,
-    user
+    user,
   };
 };
 
 export function updateUserApi(username, data) {
-  return async function(dispatch) {
+  return async function (dispatch) {
     const res = await Api.updateUser(username, data);
     return dispatch(updateUser(res));
   };
 }
 
-const updateUser = user => {
+const updateUser = (user) => {
   return {
     type: UDPATE_USER,
-    user
+    user,
+  };
+};
+
+export function updateProfilePictureApi(username, data) {
+  return async function (dispatch) {
+    const res = await Api.uploadPhoto(data, username);
+    console.log(" in dispatch post res", res);
+    return dispatch(updateProfilePicture(res));
+  };
+}
+
+const updateProfilePicture = (profilePicture) => {
+  console.log("this is the profile picture", profilePicture);
+  return {
+    type: UPDATE_PROFILE_PICTURE,
+    profilePicture,
   };
 };
 export function addUserProjectApi(title, owner) {
-  return async function(dispatch) {
+  return async function (dispatch) {
     const res = await Api.createNewProject(title, owner);
     return dispatch(addUserProject(res));
   };
 }
 
-const addUserProject = project => {
+const addUserProject = (project) => {
   return {
     type: ADD_USER_PROJECT,
-    project
+    project,
   };
 };
 
 export function addUserCowrite(project) {
   return {
     type: ADD_USER_COWRITE,
-    project
+    project,
   };
 }
 export function updateUserProjectApi(projectId, data) {
-  return async function(dispatch) {
+  return async function (dispatch) {
     const res = await Api.updatedProject(projectId, data);
     return dispatch(updateUserProject(res.updated));
   };
 }
 
-const updateUserProject = project => {
+const updateUserProject = (project) => {
   return {
     type: UPDATE_USER_PROJECT,
-    project
+    project,
   };
 };
 
 export function deleteUserProjectApi(projectId) {
-  return async function(dispatch) {
+  return async function (dispatch) {
     const res = await Api.deleteProject(projectId);
     return dispatch(deleteUserProject(+res.deleted));
   };
 }
 
-const deleteUserProject = projectId => {
+const deleteUserProject = (projectId) => {
   return {
     type: DELETE_USER_PROJECT,
-    projectId
+    projectId,
   };
 };
 export function leaveProjectApi(projectId, username) {
   projectId = +projectId;
-  return async function(dispatch) {
+  return async function (dispatch) {
     const res = await Api.leaveProject({ projectId, username });
     return dispatch(deleteUserProject(+res.removed.projectId));
   };
 }
 
 export function logoutUser() {
-  return function(dispatch) {
+  return function (dispatch) {
     return dispatch(logout());
   };
 }
 
 const logout = () => {
   return {
-    type: LOGOUT_USER
+    type: LOGOUT_USER,
   };
 };
